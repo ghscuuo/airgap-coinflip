@@ -1,0 +1,43 @@
+name: Deterministic Build Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Deterministic Artifact
+        run: |
+          export SOURCE_DATE_EPOCH=1700000000
+          export TZ=UTC
+          npm run build
+
+      - name: Extract Build Hash
+        id: hash
+        run: |
+          HTML_FILE=$(ls dist/airgap-coinflip_*.html | head -n 1)
+          echo "html_file=$HTML_FILE" >> $GITHUB_OUTPUT
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.hash.outputs.html_file }}
+          generate_release_notes: true

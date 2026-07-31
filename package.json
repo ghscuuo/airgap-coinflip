@@ -1,0 +1,29 @@
+{
+  "name": "airgap-coinflip",
+  "version": "0.0.1-rc.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "export SOURCE_DATE_EPOCH=1700000000 && export TZ=UTC && vite build && hash=$(sha256sum dist/index.html | head -c 8) && mv dist/index.html \"dist/airgap-coinflip_$hash.html\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@bitcoinerlab/secp256k1": "1.2.0",
+    "@noble/hashes": "2.2.0",
+    "@scure/bip39": "2.2.0",
+    "bip32": "5.0.1",
+    "bip39-entropy-guard": "file:./libs/bip39-entropy-guard",
+    "bitcoinjs-lib": "7.0.1",
+    "qrcode": "1.5.4"
+  },
+  "devDependencies": {
+    "vite": "8.2.0",
+    "vite-plugin-node-polyfills": "0.28.0",
+    "vite-plugin-singlefile": "2.3.3"
+  },
+  "type": "module"
+}

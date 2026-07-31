@@ -1,0 +1,36 @@
+{
+  "bip39_vectors": [
+    {
+      "name": "12-word zero entropy",
+      "entropy": "00000000000000000000000000000000",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "TREZOR",
+      "seed": "c55257c360c07c72029aebc1b53c05ed0362ada38ead3e3e9efa3708e53495531f09a6987599d18264c1e1c92f2cf141630c7a3c4ab7c81b2f001698e7463b04",
+      "bip84_first_address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+      "bip86_first_address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
+    },
+    {
+      "name": "12-word max entropy",
+      "entropy": "ffffffffffffffffffffffffffffffff",
+      "mnemonic": "zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong",
+      "passphrase": "TREZOR",
+      "seed": "ac27495480225222079d7be181583751e86f571027b0497b5b5d11218e0a8a13332572917f0f8e5a589620c6f15b11c61dee327651a14c34e18231052e48c069"
+    }
+  ],
+  "bip85_vectors": [
+    {
+      "name": "BIP85 App 0 Index 0 12 words",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "index": 0,
+      "words": 12,
+      "expected_child_mnemonic": "girl unsafe coin whisper rally add awesome zero drill what whisper orange"
+    }
+  ],
+  "descriptor_vectors": [
+    {
+      "descriptor": "wpkh([cb5b1578/84'/0'/0']xpub6CxajSMawFTjBsaJCMjg5H52QVSCzc2NdR86a1yWYgzdAe8tPN1Tdu5sy11HRTmo5J7QZD6S4HaDwZ4Z1dz151qi87KUQVW54cUqLtSN34a/<0;1>/*)",
+      "checksum": "pt46znmf"
+    }
+  ]
+}
