@@ -21,6 +21,7 @@ This codebase leverages `vite-plugin-singlefile` and `SOURCE_DATE_EPOCH` to guar
 ```bash
 git clone https://github.com/ghscuuo/airgap-coinflip.git
 cd airgap-coinflip
+git checkout v0.0.1-rc.1  # Replace with the specific release tag you are auditing
 npm ci
 
 # Enforce deterministic timestamps and compile
