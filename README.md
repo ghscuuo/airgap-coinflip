@@ -39,4 +39,16 @@ To mitigate physical vectors ($5 wrench attacks) against developers, this reposi
 `Authorship Hash: 3c16a3a41e9df6469cf361005fbc5730ce9e09dff6045d947cb2ccceb3b24f5a`
 
 ## License
-In alignment with the open-source ethos of the Bitcoin mission, this engine is released under the MIT License. Verify, don't trust.
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+## ⚠️ Absolute Liability Disclaimer
+
+**This software is provided "AS IS", without warranty of any kind, express or implied.**
+
+The human architect, pseudonymous contributors, and AI orchestration engines involved in the creation of this tool assume **absolutely zero liability** for any loss of funds, cryptographic flaws, entropy degradation, or operational failures. 
+
+Generating and managing cryptographic keys requires extreme OPSEC. If you use this tool to generate a wallet and subsequently lose funds due to a bug, a compromised offline device, an undiscovered CVE, or user error, there is no recourse. 
+
+**Do not trust this tool. Verify the source code yourself, compile it yourself, and audit the output against established libraries before committing value to the generated keys.**
