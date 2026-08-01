@@ -5,9 +5,21 @@
 A zero-trust, mathematically reproducible, offline deterministic wallet and BIP85 engine.
 
 ## The Threat Model
-Trusting silicon to generate your cryptographic secrets is the single greatest vulnerability in deep cold storage. Supply chain attacks, PRNG software flaws (e.g., the historical Coldcard seed generation bug), and firmware entropy poisoning are silent and catastrophic. 
+This tool explicitly assumes that:
+1. All Silicon Random Number Generators (RNGs) are backdoored, flawed, or compromised.
+2. All operating systems and browsers will attempt to cache, leak, or phone home sensitive data.
+3. Supply chain attacks on node modules are inevitable.
 
-This engine forces you to bypass silicon entirely. You generate the master root entropy physically (by flipping 128 pennies), and the engine derives the key tree using strictly audited mathematical primitives. 
+## Why We Reject the "Industry Standard"
+The prevailing cryptographic "industry standard" dictates that entropy should be sourced from `/dev/urandom`, `window.crypto.getRandomValues()`, or a hardware wallet's proprietary silicon RNG. 
+
+**We explicitly reject this standard.**
+
+Silicon RNGs and operating system entropy pools are opaque black boxes. History is littered with catastrophic failures where these systems were either silently compromised by state actors (e.g., Dual_EC_DRBG), suffered from fatal implementation bugs (e.g., Debian OpenSSL bug, recent hardware wallet vulnerabilities), or fell victim to side-channel attacks. 
+
+You cannot mathematically audit the physical silicon inside your hardware wallet. The only universally verifiable source of entropy is physics. 
+
+By forcing the user to manually flip a physical coin 128 times, we shift the root of trust away from unauditable firmware blobs and over to the undeniable laws of physical probability. This is agonizingly tedious for the user, but it is the absolute only way to achieve true zero-trust sovereign key generation.
 
 ## The Hermetic Seal Architecture
 1. **Airgapped Design:** This tool is designed to be executed on a freshly wiped, Live OS (e.g., Tails, Ubuntu Live USB) running entirely in volatile RAM without network interfaces active. 
