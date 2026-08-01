@@ -1,6 +1,6 @@
 # Airgap Coinflip: Deterministic Key Generation
 
-> **Transparency Note:** The cryptography and macro-architecture of this repository were human-directed. The resulting code was autonomously constructed, stress-tested, and aggressively red-team audited by a swarm of specialized Gemini Pro subagents.
+> **Transparency Note:** The strict OPSEC threat model, UI macro-architecture, and cryptographic design constraints of this repository were entirely human-directed. However, the human author did not write or review a single line of syntax. The codebase was 100% autonomously constructed, stress-tested, and aggressively red-team audited by a swarm of specialized Gemini Pro AI subagents acting as the execution layer.
 
 A zero-trust, mathematically reproducible, offline deterministic wallet and BIP85 engine.
 
