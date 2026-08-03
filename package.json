@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
-    "build": "export SOURCE_DATE_EPOCH=1700000000 && export TZ=UTC && vite build && hash=$(sha256sum dist/index.html | head -c 8) && mv dist/index.html \"dist/airgap-coinflip_$hash.html\""
+    "build": "export SOURCE_DATE_EPOCH=1700000000 && export TZ=UTC && vite build && hash=$(sha256sum dist/index.html | head -c 8) && mv dist/index.html \"dist/airgap-coinflip_$hash.html\" && node scripts/test_compiled_build.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "qrcode": "1.5.4"
   },
   "devDependencies": {
+    "jsdom": "^29.1.1",
     "vite": "8.2.0",
     "vite-plugin-node-polyfills": "0.28.0",
     "vite-plugin-singlefile": "2.3.3"

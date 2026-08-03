@@ -5,26 +5,32 @@ on:
     tags:
       - 'v*'
 
+# Set permissions block to read-only globally
+permissions:
+  contents: read
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    
+    # Restrict write permissions strictly to the job that creates/uploads the release
     permissions:
       contents: write
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Deterministic Artifact
+      - name: Build and Verify Deterministic Artifact
         run: |
           export SOURCE_DATE_EPOCH=1700000000
           export TZ=UTC
@@ -37,7 +43,7 @@ jobs:
           echo "html_file=$HTML_FILE" >> $GITHUB_OUTPUT
 
       - name: Upload Release Asset
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c062e08bd532815e2089a8070857327429186641 # v2.0.8
         with:
           files: ${{ steps.hash.outputs.html_file }}
           generate_release_notes: true
