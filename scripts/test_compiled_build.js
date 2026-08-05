@@ -40,10 +40,10 @@ const testCases = [
         expectedMnemonic: "pledge only tool order regret mouse involve repair hat food gift oval"
     },
     {
-        name: "All Zeros (Blocked)",
+        name: "All Zeros (Blocked by CVE Firewall)",
         entropy: "0".repeat(128),
         shouldPass: false,
-        expectedError: "Entropy quality is severely flawed"
+        expectedError: "Input matches known firmware vulnerability signature"
     },
     {
         name: "All Ones (Blocked)",

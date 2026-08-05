@@ -1,3 +1,4 @@
+// ZK_AUTHOR: da70b35cc0c6f82fcaebd10f693405ef1129dc3eb7221ee8fd1ecf77908dd89e
 import { EntropyEngine } from 'bip39-entropy-guard';
 import * as bip39 from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english.js';
@@ -14,6 +15,19 @@ let currentBits = '';
 let isLocked = false;
 let generatedMnemonic = '';
 let hasPassedGate = false;
+
+// --- MOCK VULNERABILITY DATABASE (Bloom Filter PoC) ---
+const COMPROMISED_ENTROPY = [
+    "10101010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", // Simulated 40-bit PRNG failure
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"  // All zeros
+];
+
+// Precompute 32-bit prefixes at load time
+const VULNERABILITY_PREFIXES = COMPROMISED_ENTROPY.map(bits => {
+    const hash = sha512(new TextEncoder().encode(bits));
+    return Array.from(hash.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join('');
+});
+
 
 // DOM Elements
 const grid = document.getElementById('grid');
@@ -274,6 +288,17 @@ function resetApp() {
 }
 
 async function processEntropy() {
+    // --- VULNERABILITY FIREWALL (Bloom Filter PoC) ---
+    const inputHash = sha512(new TextEncoder().encode(currentBits));
+    const inputPrefix = Array.from(inputHash.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    if (VULNERABILITY_PREFIXES.includes(inputPrefix)) {
+        errorTitle.innerText = 'ENTROPY_QUALITY_HARD_BLOCK';
+        errorMessage.innerText = 'Input matches known firmware vulnerability signature (CVE prefix collision). Key derivation aborted to prevent funds loss.';
+        errorSection.classList.remove('hidden');
+        return;
+    }
+
     // Clear existing nodes from previous clicks to avoid orphaning (Class 2 bug)
     try {
         if (currentRootNode && currentRootNode.privateKey) currentRootNode.privateKey.fill(0);
@@ -436,6 +461,21 @@ if (devTestBtn) {
         
         // Obvious repeating test vector
         currentBits = "00001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111";
+        document.body.classList.add('dev-mode');
+        updateUI();
+        isLocked = true;
+        processEntropy();
+    });
+}
+
+const devCveBtn = document.getElementById('dev-cve-vector');
+if (devCveBtn) {
+    devCveBtn.addEventListener('click', () => {
+        if (isLocked || !hasPassedGate) return;
+        if (!confirm("⚠️ TRIGGER FIREWALL WARNING\nThis will inject the simulated 40-bit PRNG failure to test the Bloom Filter firewall.")) return;
+        
+        // 40-bit PRNG failure simulated collapse
+        currentBits = "10101010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
         document.body.classList.add('dev-mode');
         updateUI();
         isLocked = true;
