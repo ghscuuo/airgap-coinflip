@@ -43,13 +43,13 @@ const testCases = [
         name: "All Zeros (Blocked by CVE Firewall)",
         entropy: "0".repeat(128),
         shouldPass: false,
-        expectedError: "Input matches known firmware vulnerability signature"
+        expectedError: "Input matches known weak RNG signature"
     },
     {
-        name: "All Ones (Blocked)",
+        name: "All Ones (Blocked by Weak RNG Firewall)",
         entropy: "1".repeat(128),
         shouldPass: false,
-        expectedError: "Entropy quality is severely flawed"
+        expectedError: "Input matches known weak RNG signature"
     }
 ];
 
