@@ -18,7 +18,6 @@ let hasPassedGate = false;
 
 // --- MOCK VULNERABILITY DATABASE (Bloom Filter PoC) ---
 const COMPROMISED_ENTROPY = [
-    "10101010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", // Simulated 40-bit PRNG failure
     "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", // All zeros
     "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", // All ones
     "01010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101", // Alternating 01
@@ -290,12 +289,49 @@ function resetApp() {
     updateUI();
 }
 
+// --- ALGORITHMIC PRNG DETECTIONS ---
+
+// Yasmarang (Coldcard Exploit) Detection
+function isYasmarang(bits) {
+    if (bits.length < 128) return false;
+    const out = [];
+    for (let i = 0; i < 16; i++) out.push(parseInt(bits.slice(i * 8, i * 8 + 8), 2));
+    
+    for (let d_0 = 0; d_0 < 256; d_0++) {
+        for (let n_0 = 0; n_0 < 256; n_0++) {
+            for (let pad_1 = 0; pad_1 < 256; pad_1++) {
+                const n_1 = (n_0 + pad_1 + d_0) & 0xFF;
+                const d_1 = (d_0 + n_1 + pad_1) & 0xFF;
+                const dat_0 = (out[0] - d_1 - n_1) & 0xFF;
+                const pad_0 = (pad_1 - dat_0 - d_0) & 0xFF;
+                
+                let pad = pad_0, n = n_0, d = d_0, dat = dat_0;
+                let match = true;
+                
+                for (let i = 0; i < 16; i++) {
+                    pad = (pad + dat + d) & 0xFF;
+                    n = (n + pad + d) & 0xFF;
+                    d = (d + n + pad) & 0xFF;
+                    dat = (dat + d + n) & 0xFF;
+                    
+                    if (dat !== out[i]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) return true;
+            }
+        }
+    }
+    return false;
+}
+
 async function processEntropy() {
     // --- VULNERABILITY FIREWALL (Bloom Filter PoC) ---
     const inputHash = sha512(new TextEncoder().encode(currentBits));
     const inputPrefix = Array.from(inputHash.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join('');
     
-    if (VULNERABILITY_PREFIXES.includes(inputPrefix)) {
+    if (VULNERABILITY_PREFIXES.includes(inputPrefix) || isYasmarang(currentBits)) {
         errorTitle.innerText = 'ENTROPY_QUALITY_HARD_BLOCK';
         errorMessage.innerText = 'Input matches known weak RNG signature. Key derivation aborted to prevent funds loss.';
         errorSection.classList.remove('hidden');
@@ -477,8 +513,8 @@ if (devCveBtn) {
         if (isLocked || !hasPassedGate) return;
         if (!confirm("⚠️ TRIGGER FIREWALL WARNING\nThis will inject the simulated 40-bit PRNG failure to test the Bloom Filter firewall.")) return;
         
-        // 40-bit PRNG failure simulated collapse
-        currentBits = "10101010101010101010101010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        // Yasmarang PRNG simulated collapse
+        currentBits = "00100011001100100110011101111100000011011110101000001001001101000000101101001010100011110010110010110101000100101011000100100100";
         document.body.classList.add('dev-mode');
         updateUI();
         isLocked = true;

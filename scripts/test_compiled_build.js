@@ -40,7 +40,13 @@ const testCases = [
         expectedMnemonic: "pledge only tool order regret mouse involve repair hat food gift oval"
     },
     {
-        name: "All Zeros (Blocked by CVE Firewall)",
+        name: "Yasmarang (Blocked by Coldcard Exploit Firewall)",
+        entropy: "00100011001100100110011101111100000011011110101000001001001101000000101101001010100011110010110010110101000100101011000100100100",
+        shouldPass: false,
+        expectedError: "Input matches known weak RNG signature"
+    },
+    {
+        name: "All Zeros (Blocked by Bloom Firewall)",
         entropy: "0".repeat(128),
         shouldPass: false,
         expectedError: "Input matches known weak RNG signature"
