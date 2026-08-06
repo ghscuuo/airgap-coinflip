@@ -12,12 +12,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@bitcoinerlab/secp256k1": "1.2.0",
-    "@noble/hashes": "2.2.0",
-    "@scure/bip39": "2.2.0",
-    "bip32": "5.0.1",
+    "@bitcoinerlab/secp256k1": "file:./vendor/bitcoinerlab-secp256k1-1.2.0",
+    "@noble/hashes": "file:./vendor/noble-hashes-2.2.0",
+    "@scure/bip39": "file:./vendor/scure-bip39-2.2.0",
+    "bip32": "file:./vendor/bip32-5.0.1",
     "bip39-entropy-guard": "file:./libs/bip39-entropy-guard",
-    "bitcoinjs-lib": "7.0.1",
+    "bitcoinjs-lib": "file:./vendor/bitcoinjs-lib-7.0.1",
     "qrcode": "1.5.4"
   },
   "devDependencies": {
